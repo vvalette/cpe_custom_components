@@ -1,0 +1,21 @@
+version: '3.7'
+
+# See https://www.home-assistant.io/docs/installation/docker/
+# Also https://github.com/postlund/hassio-compose
+services:
+  homeassistant:
+    #build: DockerFiles/homeassistant
+    image: homeassistant/qemux86-64-homeassistant
+    restart: unless-stopped
+    container_name: homeassistant
+    network_mode: host
+    #user: "${UID_GID}"
+    volumes:
+        #- ./data/homeassistant:/config
+        - ./config:/config
+        - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8123"]
+      interval: 30s
+      timeout: 10s
+      retries: 6

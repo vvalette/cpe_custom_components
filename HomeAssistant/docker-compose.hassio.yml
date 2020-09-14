@@ -1,0 +1,22 @@
+version: '3.7'
+
+# See https://www.home-assistant.io/docs/installation/docker/
+# Also https://github.com/postlund/hassio-compose
+services:
+  hassio:
+    #build: DockerFiles/hassio-supervisor
+    image: homeassistant/amd64-hassio-supervisor
+    container_name: hassio_supervisor
+    privileged: true
+    security_opt:
+      - seccomp:unconfined
+    #user: "${UID_GID}"
+    environment:
+      - HOMEASSISTANT_REPOSITORY=homeassistant/qemux86-64-homeassistant
+      - SUPERVISOR_SHARE=${PWD}/data
+      - SUPERVISOR_NAME=hassio_supervisor
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
